@@ -20,8 +20,8 @@ interface CatCanvasProps {
 }
 
 const CAT_NAMES = [
-  "ミケ",
-  "チャチャ",
+  "タマ",
+  "カブ",
   "クロ",
   "ユキ",
   "ハチ",
@@ -87,7 +87,12 @@ function getRandomItem<T>(arr: T[]): T {
 
 function createRandomCat(id: number, phase: Phase, existingCats: CatInstance[]): CatInstance {
   const breed = CAT_BREEDS[id % CAT_BREEDS.length];
-  const name = CAT_NAMES[id % CAT_NAMES.length];
+  // Specific names: Mike is "タマ", Chatora is "カブ"
+  const breedNames: Partial<Record<CatBreed, string>> = {
+    mike: "タマ",
+    chatora: "カブ",
+  };
+  const name = breedNames[breed] || CAT_NAMES[id % CAT_NAMES.length];
   const activity =
     phase === "focus"
       ? getRandomItem(FOCUS_ACTIVITIES)

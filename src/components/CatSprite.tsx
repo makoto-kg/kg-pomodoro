@@ -37,9 +37,10 @@ const BREED_COLORS: Record<
     nose: "#FF8E8E",
   },
   chatora: {
-    body: "#FCA45A",
-    stripes: "#D86B23",
-    ears: "#FCA45A",
+    body: "#F79A45", // warm ginger orange
+    stripes: "#D26214", // vivid ginger stripes
+    patch1: "#FFFFFF", // white patches for muzzle, belly, paw
+    ears: "#F79A45",
     innerEar: "#FFB8B8",
     eyes: "#4C9A4B",
     nose: "#FF9B9B",
@@ -146,18 +147,18 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
         {isWalking ? (
           <path
             d="M 28 58 Q 14 42 20 28 Q 24 24 26 28 Q 24 38 32 54"
-            fill={colors.stripes || colors.patch1 || colors.body}
+            fill={breed === "mike" ? colors.patch2 : (colors.stripes || colors.patch1 || colors.body)}
             className="animate-wiggle origin-bottom-right"
           />
         ) : activity === "sleeping" ? (
           <path
             d="M 32 68 C 22 68 18 56 24 50 C 26 48 29 52 28 56 C 25 60 28 64 34 65"
-            fill={colors.stripes || colors.patch1 || colors.body}
+            fill={breed === "mike" ? colors.patch2 : (colors.stripes || colors.patch1 || colors.body)}
           />
         ) : (
           <path
             d="M 26 62 Q 10 52 14 36 Q 16 30 20 34 Q 18 46 30 58"
-            fill={colors.stripes || colors.patch1 || colors.body}
+            fill={breed === "mike" ? colors.patch2 : (colors.stripes || colors.patch1 || colors.body)}
             className="animate-tail origin-bottom-right"
           />
         )}
@@ -167,14 +168,20 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           // Curled up sleeping body
           <g>
             <ellipse cx="54" cy="64" rx="26" ry="18" fill={colors.body} />
-            {/* Calico / Tabby spots */}
+            {/* White belly for chatora */}
+            {breed === "chatora" && (
+              <ellipse cx="54" cy="66" rx="18" ry="11" fill="#FFFFFF" />
+            )}
+            {/* Calico spots - large brown & black coverage for Mike */}
             {breed === "mike" && (
               <>
-                <path d="M 40 50 Q 52 48 48 64 Q 38 60 40 50 Z" fill={colors.patch1} />
-                <path d="M 62 52 Q 74 54 70 68 Q 58 66 62 52 Z" fill={colors.patch2} />
+                <path d="M 30 48 Q 50 44 48 66 Q 28 66 30 48 Z" fill={colors.patch1} />
+                <path d="M 48 46 Q 78 48 76 70 Q 48 70 48 54 Z" fill={colors.patch2} />
+                <path d="M 28 62 Q 36 64 34 70 Q 26 70 28 62 Z" fill={colors.patch1} />
               </>
             )}
-            {colors.stripes && (
+            {/* Tabby stripes (not on chatora belly) */}
+            {colors.stripes && breed !== "chatora" && (
               <>
                 <path d="M 44 52 Q 48 58 45 66" stroke={colors.stripes} strokeWidth="2.5" strokeLinecap="round" />
                 <path d="M 54 50 Q 56 58 55 68" stroke={colors.stripes} strokeWidth="2.5" strokeLinecap="round" />
@@ -186,20 +193,29 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           // Sitting or walking body
           <g>
             <ellipse cx="50" cy="58" rx="20" ry="17" fill={colors.body} />
-            {/* Chest & belly highlight */}
-            <ellipse cx="52" cy="60" rx="13" ry="11" fill={`url(#bellyGrad-${breed})`} />
+            {/* Chest & belly highlight / White belly for chatora */}
+            {breed === "chatora" ? (
+              <ellipse cx="52" cy="60" rx="14" ry="12" fill="#FFFFFF" />
+            ) : (
+              <ellipse cx="52" cy="60" rx="13" ry="11" fill={`url(#bellyGrad-${breed})`} />
+            )}
 
             {/* Breed patterns on body */}
             {breed === "mike" && (
               <>
-                <path d="M 38 46 Q 48 44 44 58 Q 34 54 38 46 Z" fill={colors.patch1} />
-                <path d="M 58 50 Q 68 52 64 64 Q 54 62 58 50 Z" fill={colors.patch2} />
+                {/* Large brown patch covering back and upper left */}
+                <path d="M 30 46 Q 48 42 46 62 Q 32 68 28 54 Z" fill={colors.patch1} />
+                {/* Large black patch covering right side and hip */}
+                <path d="M 46 44 Q 69 46 68 64 Q 50 68 46 56 Z" fill={colors.patch2} />
+                {/* Additional brown marking near lower flank */}
+                <path d="M 34 62 Q 44 64 42 71 Q 32 71 34 62 Z" fill={colors.patch1} />
               </>
             )}
             {breed === "hachiware" && (
               <path d="M 34 50 Q 42 46 38 64 Q 32 60 34 50 Z" fill={colors.patch1} />
             )}
-            {colors.stripes && (
+            {/* Tabby stripes on body (not on chatora belly) */}
+            {colors.stripes && breed !== "chatora" && (
               <>
                 <path d="M 40 48 Q 44 54 42 62" stroke={colors.stripes} strokeWidth="2" strokeLinecap="round" />
                 <path d="M 50 46 Q 52 53 50 62" stroke={colors.stripes} strokeWidth="2" strokeLinecap="round" />
@@ -214,8 +230,8 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           <g className="animate-walk">
             {/* Left back leg */}
             <ellipse cx="36" cy="74" rx="4" ry="7" fill={colors.body} className="animate-leg-1" />
-            {/* Left front leg */}
-            <ellipse cx="46" cy="74" rx="4" ry="7" fill={colors.body} className="animate-leg-2" />
+            {/* Left front leg (Creamy whitish sock for chatora) */}
+            <ellipse cx="46" cy="74" rx="4" ry="7" fill={breed === "chatora" ? "#F6EDE4" : colors.body} stroke={breed === "chatora" ? "#DAC4B0" : "none"} strokeWidth="0.6" className="animate-leg-2" />
             {/* Right back leg */}
             <ellipse cx="56" cy="74" rx="4" ry="7" fill={colors.body} className="animate-leg-1" />
             {/* Right front leg */}
@@ -223,17 +239,17 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           </g>
         ) : activity === "sleeping" ? (
           <g>
-            <ellipse cx="44" cy="72" rx="5" ry="3.5" fill={colors.body} />
+            <ellipse cx="44" cy="72" rx="5" ry="3.5" fill={breed === "chatora" ? "#F6EDE4" : colors.body} stroke={breed === "chatora" ? "#DAC4B0" : "none"} strokeWidth="0.6" />
             <ellipse cx="62" cy="72" rx="5" ry="3.5" fill={colors.body} />
           </g>
         ) : (
           <g>
-            {/* Front paws neatly placed */}
-            <ellipse cx="45" cy="73" rx="5" ry="4" fill={colors.body} stroke="#E2E8F0" strokeWidth="0.5" />
+            {/* Front paws neatly placed (Left front paw creamy whitish for chatora) */}
+            <ellipse cx="45" cy="73" rx="5" ry="4" fill={breed === "chatora" ? "#F6EDE4" : colors.body} stroke={breed === "chatora" ? "#DAC4B0" : "#E2E8F0"} strokeWidth="0.8" />
             <ellipse cx="58" cy="73" rx="5" ry="4" fill={colors.body} stroke="#E2E8F0" strokeWidth="0.5" />
             {/* Toe lines */}
-            <line x1="43" y1="73" x2="43" y2="76" stroke="#CBD5E1" strokeWidth="1" strokeLinecap="round" />
-            <line x1="46" y1="73" x2="46" y2="76" stroke="#CBD5E1" strokeWidth="1" strokeLinecap="round" />
+            <line x1="43" y1="73" x2="43" y2="76" stroke={breed === "chatora" ? "#BFA38E" : "#CBD5E1"} strokeWidth="1" strokeLinecap="round" />
+            <line x1="46" y1="73" x2="46" y2="76" stroke={breed === "chatora" ? "#BFA38E" : "#CBD5E1"} strokeWidth="1" strokeLinecap="round" />
             <line x1="56" y1="73" x2="56" y2="76" stroke="#CBD5E1" strokeWidth="1" strokeLinecap="round" />
             <line x1="59" y1="73" x2="59" y2="76" stroke="#CBD5E1" strokeWidth="1" strokeLinecap="round" />
           </g>
@@ -245,7 +261,7 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           {/* Left Ear */}
           <path
             d="M 40 32 L 32 12 Q 44 18 48 30 Z"
-            fill={colors.ears}
+            fill={breed === "mike" ? colors.patch1 : colors.ears}
             stroke={colors.patch1 || colors.body}
             strokeWidth="1"
           />
@@ -254,7 +270,7 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           {/* Right Ear */}
           <path
             d="M 62 30 Q 66 18 78 12 L 70 32 Z"
-            fill={colors.ears}
+            fill={breed === "mike" ? colors.patch2 : colors.ears}
             stroke={colors.patch1 || colors.body}
             strokeWidth="1"
           />
@@ -272,8 +288,16 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           )}
           {breed === "mike" && (
             <>
-              <path d="M 36 28 Q 44 24 48 36 Q 40 40 36 28 Z" fill={colors.patch1} />
-              <path d="M 64 26 Q 74 28 72 40 Q 62 38 64 26 Z" fill={colors.patch2} />
+              {/* Large Brown/Orange on left face */}
+              <path
+                d="M 36 24 Q 49 23 52 34 Q 48 48 37 46 Q 33 38 36 24 Z"
+                fill={colors.patch1}
+              />
+              {/* Large Black/Charcoal on right face */}
+              <path
+                d="M 58 23 Q 74 24 74 44 Q 69 49 59 46 Q 54 35 58 23 Z"
+                fill={colors.patch2}
+              />
             </>
           )}
           {breed === "siamese" && (
@@ -285,6 +309,11 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
               <path d="M 50 26 L 47 31" stroke={colors.stripes} strokeWidth="1.5" strokeLinecap="round" />
               <path d="M 60 26 L 63 31" stroke={colors.stripes} strokeWidth="1.5" strokeLinecap="round" />
             </>
+          )}
+
+          {/* White muzzle around mouth for chatora (茶トラ白) */}
+          {breed === "chatora" && (
+            <ellipse cx="55" cy="43" rx="10" ry="6.5" fill="#FFFFFF" />
           )}
 
           {/* Cheeks Blush */}
