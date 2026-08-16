@@ -45,12 +45,12 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = ({
   return (
     <div className="flex flex-col items-center justify-center relative w-full">
       {/* Current Real-time Clock Header */}
-      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/5 dark:bg-white/10 backdrop-blur-md border border-slate-900/10 dark:border-white/10 mb-4 transition-all">
-        <Clock className="w-4 h-4 text-slate-600 dark:text-slate-300 animate-pulse" />
-        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/10 dark:bg-white/10 backdrop-blur-md border border-slate-900/15 dark:border-white/15 mb-4 transition-all">
+        <Clock className="w-4 h-4 text-slate-700 dark:text-slate-200 animate-pulse" />
+        <span className="text-xs text-slate-700 dark:text-slate-300 font-bold">
           現在時刻:
         </span>
-        <span className="text-sm font-mono font-bold text-slate-800 dark:text-slate-100 tracking-wider">
+        <span className="text-sm font-mono font-black text-slate-900 dark:text-white tracking-wider">
           {formatClockTime(state.currentDate)}
         </span>
       </div>
@@ -78,7 +78,7 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = ({
             stroke="currentColor"
             strokeWidth="12"
             fill="transparent"
-            className="text-slate-200/80 dark:text-slate-700/60"
+            className="text-slate-200/90 dark:text-slate-700/80"
           />
 
           {/* Progress Arc */}
@@ -102,25 +102,25 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = ({
           <div
             className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold shadow-sm transition-all mb-1 ${
               isFocus
-                ? "bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
-                : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                ? "bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-200 border border-rose-300 dark:border-rose-700"
+                : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700"
             }`}
           >
             <span>{isFocus ? "🍅 集中タイム" : "☕ リラックスタイム"}</span>
           </div>
 
-          {/* Remaining Countdown MM:SS */}
-          <div className="flex items-baseline justify-center font-mono font-black text-slate-800 dark:text-slate-100 tracking-tighter my-1">
-            <span className="text-5xl sm:text-6xl">{minutes}</span>
-            <span className="text-4xl sm:text-5xl opacity-60 mx-0.5 animate-pulse">:</span>
-            <span className="text-5xl sm:text-6xl">{seconds}</span>
+          {/* Remaining Countdown MM:SS (High contrast & crisp on mobile) */}
+          <div className="flex items-baseline justify-center font-mono font-black text-slate-900 dark:text-white tracking-tighter my-1">
+            <span className="text-5xl sm:text-6xl text-slate-900 dark:text-white drop-shadow-xs">{minutes}</span>
+            <span className="text-4xl sm:text-5xl text-slate-700 dark:text-slate-300 mx-0.5 animate-pulse font-bold">:</span>
+            <span className="text-5xl sm:text-6xl text-slate-900 dark:text-white drop-shadow-xs">{seconds}</span>
           </div>
 
           {/* Next Transition Time info */}
-          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            あと <span className="font-bold text-slate-700 dark:text-slate-200">{minutes}分{seconds}秒</span> で
+          <div className="text-xs text-slate-700 dark:text-slate-200 font-semibold leading-relaxed">
+            あと <span className="font-extrabold text-slate-950 dark:text-white underline decoration-amber-400 decoration-2">{minutes}分{seconds}秒</span> で
             <br />
-            <span className="text-[11px] opacity-90">
+            <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
               {state.nextPhaseTime} に{isFocus ? "リラックス" : "集中"}へ
             </span>
           </div>

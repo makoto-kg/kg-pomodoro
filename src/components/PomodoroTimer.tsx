@@ -143,15 +143,15 @@ export const PomodoroTimer: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold">
             {mode === "clock" && (
-              <span className="bg-amber-100/70 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-2.5 py-1 rounded-full font-medium">
+              <span className="bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-100 px-3 py-1 rounded-full font-bold border border-amber-200 dark:border-amber-700 shadow-2xs">
                 🕒 00分 / 30分 集中自動スタート
               </span>
             )}
             {state.cycleCount > 0 && (
-              <span className="flex items-center gap-1 font-bold text-rose-500">
-                <Heart className="w-3.5 h-3.5 fill-rose-500" />
+              <span className="flex items-center gap-1 font-extrabold text-rose-600 dark:text-rose-400">
+                <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
                 {state.cycleCount} サイクル完了
               </span>
             )}

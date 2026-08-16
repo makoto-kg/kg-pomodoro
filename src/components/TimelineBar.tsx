@@ -24,14 +24,14 @@ export const TimelineBar: React.FC<TimelineBarProps> = ({
     <div className="w-full bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-slate-200/60 dark:border-slate-700/60 transition-all">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-bold tracking-tight text-slate-700 dark:text-slate-200 whitespace-nowrap">
+          <span className="text-xs font-black tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
             1時間スケジュール
           </span>
-          <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">
+          <span className="text-xs text-slate-600 dark:text-slate-300 font-semibold whitespace-nowrap">
             (00分 / 30分 集中)
           </span>
         </div>
-        <div className="text-xs text-slate-600 dark:text-slate-300 font-mono font-medium whitespace-nowrap bg-slate-100/90 dark:bg-slate-900/60 px-2 py-0.5 rounded-lg border border-slate-200/70 dark:border-slate-700/70">
+        <div className="text-xs text-slate-900 dark:text-white font-mono font-bold whitespace-nowrap bg-slate-200/90 dark:bg-slate-900/80 px-2.5 py-0.5 rounded-lg border border-slate-300 dark:border-slate-700 shadow-2xs">
           現在 {m.toString().padStart(2, "0")}:{s.toString().padStart(2, "0")}
         </div>
       </div>
@@ -96,18 +96,18 @@ export const TimelineBar: React.FC<TimelineBarProps> = ({
       </div>
 
       {/* Axis Labels */}
-      <div className="relative w-full flex justify-between text-[10px] text-slate-400 dark:text-slate-500 font-mono mt-1.5 px-0.5">
-        <span className="font-semibold text-rose-600 dark:text-rose-400">:00 集中</span>
-        <span className="text-emerald-600 dark:text-emerald-400" style={{ marginLeft: "36%" }}>
+      <div className="relative w-full flex justify-between text-[11px] font-bold font-mono mt-2 px-0.5">
+        <span className="text-rose-700 dark:text-rose-300">:00 集中</span>
+        <span className="text-emerald-700 dark:text-emerald-300" style={{ marginLeft: "36%" }}>
           :25 休憩
         </span>
-        <span className="font-semibold text-rose-600 dark:text-rose-400" style={{ marginLeft: "2%" }}>
+        <span className="text-rose-700 dark:text-rose-300" style={{ marginLeft: "2%" }}>
           :30 集中
         </span>
-        <span className="text-emerald-600 dark:text-emerald-400" style={{ marginLeft: "36%" }}>
+        <span className="text-emerald-700 dark:text-emerald-300" style={{ marginLeft: "36%" }}>
           :55 休憩
         </span>
-        <span>:00</span>
+        <span className="text-slate-700 dark:text-slate-300">:00</span>
       </div>
     </div>
   );
