@@ -94,21 +94,6 @@ export const TimelineBar: React.FC<TimelineBarProps> = ({
           <div className="absolute -top-1 -left-1.5 w-4 h-4 bg-indigo-600 dark:bg-indigo-400 rounded-full border-2 border-white dark:border-slate-900 shadow-sm" />
         </div>
       </div>
-
-      {/* Axis Labels */}
-      <div className="relative w-full flex justify-between text-[11px] font-bold font-mono mt-2 px-0.5">
-        <span className="text-rose-700 dark:text-rose-300">:00 集中</span>
-        <span className="text-emerald-700 dark:text-emerald-300" style={{ marginLeft: "36%" }}>
-          :25 休憩
-        </span>
-        <span className="text-rose-700 dark:text-rose-300" style={{ marginLeft: "2%" }}>
-          :30 集中
-        </span>
-        <span className="text-emerald-700 dark:text-emerald-300" style={{ marginLeft: "36%" }}>
-          :55 休憩
-        </span>
-        <span className="text-slate-700 dark:text-slate-300">:00</span>
-      </div>
     </div>
   );
 };
