@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐾 ねこポモドーロ (Neko Pomodoro)
 
-## Getting Started
+ミーティングの多いワークスタイル（00分・30分開始）にジャストフィットする、時計連動型の25分集中・5分休憩ポモドーロ・タイマーWebアプリケーションです。
+かわいい様々な種類の猫たちが、集中時間には一生懸命お仕事・勉強し、休憩時間には眠ったりご飯を食べたり遊んだりして画面内を自由に歩き回ります。
 
-First, run the development server:
+---
 
+## ✨ 主な特徴
+
+- 🕒 **00分 / 30分 集中自動スタート（時計同期モード）**:
+  - `00分〜25分` / `30分〜55分` : 集中タイム (25分)
+  - `25分〜30分` / `55分〜00分` : リラックスタイム (5分)
+  - ミーティングや定例会が00分・30分から始まるスケジュールに完全対応。
+- 🐱 **かわいい猫たちのアニメーション & インタラクション**:
+  - 三毛猫、茶トラ、黒猫、白猫、ハチワレ、サバトラ、シャム猫など多彩な種類。
+  - **集中時**: ノートPCでプログラミング、丸メガネで読書、メモ取り、ポモドーロハチマキ。
+  - **休憩時**: ふわふわクッションでお昼寝(Zzz)、たい焼きやお魚のお食事、毛糸玉遊び、お茶。
+  - 猫をクリック/タップするとかわいい鳴き声・セリフ・ハートエフェクトが発生。
+  - 猫の頭数を3〜8匹で調整可能。
+- 🔔 **心地よいWeb Audio通知音 & デスクトップ通知**:
+  - フェーズ切り替え時にクリアで優しいチャイム（音色・音量設定可能）を自動再生。
+  - バックグラウンド作業時にもデスクトップ通知でお知らせ。
+- 🎨 **4種類の空間テーマ**:
+  - ☕ 北欧カフェ (Cozy Cafe)
+  - ☀️ 陽だまりリビング (Sunny Room)
+  - 🌙 夜カフェ・書斎 (Midnight Study)
+  - 🌸 和モダン・縁側 (Zen Engawa)
+- 🚀 **SPA / CSR 静的エクスポート対応 & コンテキストルート設定**:
+  - `output: 'export'` による完全な静的SPA構成。
+  - `BASE_PATH` または `NEXT_PUBLIC_BASE_PATH` 環境変数により任意のサブディレクトリ・コンテキストルートにデプロイ可能。
+
+---
+
+## 🛠️ 技術スタック
+
+- **Next.js**: 16.3.1 (最新安定版 / App Router)
+- **React**: 19
+- **TypeScript** / **Tailwind CSS**
+- **Lucide Icons** / **Canvas Confetti**
+- **Web Audio API**
+
+---
+
+## 💻 開発・起動方法
+
+### 開発サーバーの起動
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+ブラウザで `http://localhost:3000` を開きます。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### プロダクションビルド（静的SPAエクスポート）
+```bash
+npm run build
+```
+`out/` ディレクトリに静的ファイル（HTML, CSS, JS, Assets）が出力されます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### コンテキストルート（サブディレクトリ）を指定してビルドする場合
+環境変数 `BASE_PATH` を指定してビルドします：
+```bash
+BASE_PATH=/my-context-root npm run build
+```
+または
+```bash
+NEXT_PUBLIC_BASE_PATH=/my-context-root npm run build
+```
+生成された `out/` ディレクトリ内のすべてのリンク・JS・CSS・画像パスに `/my-context-root` が付与されます。
