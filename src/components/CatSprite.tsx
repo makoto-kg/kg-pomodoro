@@ -257,24 +257,24 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
 
         {/* --- CAT HEAD --- */}
         <g transform={activity === "sleeping" && !isWalking ? "translate(8, 12)" : "translate(0, 0)"}>
-          {/* Ears */}
+          {/* Ears (Shorter, cute cat proportions) */}
           {/* Left Ear */}
           <path
-            d="M 40 32 L 32 12 Q 44 18 48 30 Z"
+            d="M 40 30 L 34 18 Q 43 20 47 28 Z"
             fill={breed === "mike" ? colors.patch1 : colors.ears}
             stroke={colors.patch1 || colors.body}
             strokeWidth="1"
           />
-          <path d="M 38 28 L 34 16 Q 42 20 44 28 Z" fill={colors.innerEar} />
+          <path d="M 39 27 L 36 20 Q 42 21 44 26 Z" fill={colors.innerEar} />
 
           {/* Right Ear */}
           <path
-            d="M 62 30 Q 66 18 78 12 L 70 32 Z"
+            d="M 63 28 Q 67 20 76 18 L 70 30 Z"
             fill={breed === "mike" ? colors.patch2 : colors.ears}
             stroke={colors.patch1 || colors.body}
             strokeWidth="1"
           />
-          <path d="M 66 28 Q 68 20 76 16 L 72 28 Z" fill={colors.innerEar} />
+          <path d="M 66 26 Q 68 21 74 20 L 71 27 Z" fill={colors.innerEar} />
 
           {/* Head Base */}
           <ellipse cx="55" cy="38" rx="19" ry="16" fill={colors.body} />
@@ -305,9 +305,10 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           )}
           {colors.stripes && (
             <>
-              <path d="M 55 24 L 55 30" stroke={colors.stripes} strokeWidth="2" strokeLinecap="round" />
-              <path d="M 50 26 L 47 31" stroke={colors.stripes} strokeWidth="1.5" strokeLinecap="round" />
-              <path d="M 60 26 L 63 31" stroke={colors.stripes} strokeWidth="1.5" strokeLinecap="round" />
+              {/* Parallel vertical forehead stripes */}
+              <line x1="55" y1="24" x2="55" y2="30" stroke={colors.stripes} strokeWidth="2" strokeLinecap="round" />
+              <line x1="49" y1="25" x2="49" y2="30" stroke={colors.stripes} strokeWidth="1.8" strokeLinecap="round" />
+              <line x1="61" y1="25" x2="61" y2="30" stroke={colors.stripes} strokeWidth="1.8" strokeLinecap="round" />
             </>
           )}
 

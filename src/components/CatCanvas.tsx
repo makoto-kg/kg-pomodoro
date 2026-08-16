@@ -8,15 +8,17 @@ import {
   FocusActivity,
   BreakActivity,
   Phase,
+  Theme,
 } from "@/types/pomodoro";
 import { CatSprite } from "./CatSprite";
+import { RoomDecor } from "./RoomDecor";
 import { soundManager } from "@/utils/audio";
 
 interface CatCanvasProps {
   phase: Phase;
   catCount: number;
   soundEnabled: boolean;
-  theme: string;
+  theme: Theme | string;
 }
 
 const CAT_NAMES = [
@@ -85,6 +87,15 @@ function getRandomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// Relax time: mainly sleeping (60%) or eating (30%), with rare tea/playing (10%)
+function getBreakActivity(): BreakActivity {
+  const r = Math.random();
+  if (r < 0.60) return "sleeping";
+  if (r < 0.90) return "eating";
+  if (r < 0.96) return "tea";
+  return "playing";
+}
+
 function createRandomCat(id: number, phase: Phase, existingCats: CatInstance[]): CatInstance {
   const breed = CAT_BREEDS[id % CAT_BREEDS.length];
   // Specific names: Mike is "タマ", Chatora is "カブ"
@@ -96,13 +107,13 @@ function createRandomCat(id: number, phase: Phase, existingCats: CatInstance[]):
   const activity =
     phase === "focus"
       ? getRandomItem(FOCUS_ACTIVITIES)
-      : getRandomItem(BREAK_ACTIVITIES);
+      : getBreakActivity();
 
-  // Distribute cats across horizontal space
+  // Distribute cats across horizontal floor space (strictly on floor: y: 52% ~ 84%)
   const section = 80 / Math.max(1, existingCats.length + 1);
   const baseX = 8 + id * section + (Math.random() * 10 - 5);
-  const x = Math.min(88, Math.max(6, baseX));
-  const y = 35 + (id % 3) * 16 + Math.random() * 10; // spread vertically
+  const x = Math.min(88, Math.max(8, baseX));
+  const y = 52 + (id % 3) * 10 + Math.random() * 8; // strictly on floor!
 
   return {
     id: `cat-${id}-${Date.now()}`,
@@ -157,8 +168,8 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
         activity:
           phase === "focus"
             ? getRandomItem(FOCUS_ACTIVITIES)
-            : getRandomItem(BREAK_ACTIVITIES),
-        // When break starts, sleeping or eating is common
+            : getBreakActivity(),
+        // Immediately settle down into calm state
         state: "active",
       }))
     );
@@ -180,7 +191,7 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
               const nextActivity =
                 phase === "focus"
                   ? getRandomItem(FOCUS_ACTIVITIES)
-                  : getRandomItem(BREAK_ACTIVITIES);
+                  : getBreakActivity();
               return {
                 ...cat,
                 x: cat.targetX,
@@ -189,8 +200,8 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
                 activity: nextActivity,
               };
             } else {
-              // Step towards target
-              const step = cat.speed;
+              // Step towards target (gentle and relaxed in break phase)
+              const step = phase === "break" ? cat.speed * 0.65 : cat.speed;
               const nextX = cat.x + (dx / dist) * step;
               const nextY = cat.y + (dy / dist) * step;
               return {
@@ -201,12 +212,12 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
               };
             }
           } else {
-            // Cat is active in place. Random chance to start walking somewhere new
-            // Cats sleep more in break phase, walk slightly less
-            const walkChance = phase === "break" ? 0.08 : 0.12;
+            // Cat is active in place.
+            // In relax phase: cats mainly sleep and eat calmly, walking only very rarely (1.2% chance per tick)
+            const walkChance = phase === "break" ? 0.012 : 0.04;
             if (Math.random() < walkChance) {
-              const targetX = 6 + Math.random() * 80;
-              const targetY = 32 + Math.random() * 45;
+              const targetX = 8 + Math.random() * 78;
+              const targetY = 52 + Math.random() * 32; // strictly on floor!
               return {
                 ...cat,
                 targetX,
@@ -296,51 +307,10 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-72 sm:h-80 md:h-96 rounded-3xl overflow-hidden shadow-inner border border-white/20 select-none backdrop-blur-sm transition-all duration-700"
-      style={{
-        background:
-          theme === "midnight"
-            ? "linear-gradient(180deg, rgba(24, 24, 37, 0.8) 0%, rgba(15, 15, 23, 0.95) 100%)"
-            : theme === "sunny"
-            ? "linear-gradient(180deg, rgba(254, 243, 199, 0.6) 0%, rgba(253, 230, 138, 0.4) 60%, rgba(254, 249, 195, 0.8) 100%)"
-            : theme === "zen"
-            ? "linear-gradient(180deg, rgba(236, 253, 245, 0.7) 0%, rgba(209, 250, 229, 0.6) 60%, rgba(243, 244, 246, 0.8) 100%)"
-            : "linear-gradient(180deg, rgba(255, 247, 237, 0.8) 0%, rgba(254, 237, 213, 0.6) 50%, rgba(255, 251, 235, 0.9) 100%)",
-      }}
+      className="relative w-full h-72 sm:h-80 md:h-96 rounded-3xl overflow-hidden shadow-xl border border-white/40 dark:border-slate-700/60 select-none backdrop-blur-sm transition-all duration-700"
     >
-      {/* Background Room Decor based on theme */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
-        {/* Floor Plank Lines */}
-        <div className="absolute bottom-0 w-full h-32 border-t border-amber-900/10 flex flex-col justify-evenly">
-          <div className="w-full h-[1px] bg-amber-900/5" />
-          <div className="w-full h-[1px] bg-amber-900/5" />
-          <div className="w-full h-[1px] bg-amber-900/5" />
-        </div>
-
-        {/* Cozy Window in background */}
-        <div className="absolute top-4 right-8 w-24 h-24 rounded-t-full border-4 border-amber-800/20 bg-sky-100/40 flex items-center justify-center overflow-hidden">
-          <div className="w-full h-[2px] bg-amber-800/20" />
-          <div className="absolute h-full w-[2px] bg-amber-800/20" />
-          {theme === "midnight" ? (
-            <div className="absolute top-2 right-4 text-amber-200 text-xs">🌙</div>
-          ) : (
-            <div className="absolute top-2 right-3 text-amber-400 text-xs">☀️</div>
-          )}
-        </div>
-
-        {/* Potted Houseplant */}
-        <div className="absolute bottom-16 left-6 flex flex-col items-center">
-          <div className="text-xl">🌿</div>
-          <div className="w-6 h-5 bg-amber-700/40 rounded-b-md border border-amber-800/30" />
-        </div>
-
-        {/* Bookshelf / Wall Clock */}
-        <div className="absolute top-6 left-8 flex items-center gap-2">
-          <div className="px-2 py-0.5 bg-amber-800/20 rounded text-[10px] text-amber-900/60 font-mono">
-            {phase === "focus" ? "📚 集中中・しずかにニャ" : "☕ 休憩中・のんびりニャ"}
-          </div>
-        </div>
-      </div>
+      {/* Background Room Decor & Theme Window / Furniture */}
+      <RoomDecor theme={theme as Theme} phase={phase} />
 
       {/* Roaming Cats */}
       {cats.map((cat) => {
