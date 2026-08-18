@@ -25,6 +25,8 @@ const BREED_COLORS: Record<
     eyeRight?: string;
     nose: string;
     stripes?: string;
+    pawStroke: string; // natural boundary outline for legs and paws
+    pawToe: string;    // natural toe separation line
   }
 > = {
   mike: {
@@ -35,6 +37,8 @@ const BREED_COLORS: Record<
     innerEar: "#FFB8B8",
     eyes: "#3D7B58",
     nose: "#FF8E8E",
+    pawStroke: "#D8CCBC",
+    pawToe: "#BFAFA0",
   },
   chatora: {
     body: "#F79A45", // warm ginger orange
@@ -44,6 +48,8 @@ const BREED_COLORS: Record<
     innerEar: "#FFB8B8",
     eyes: "#4C9A4B",
     nose: "#FF9B9B",
+    pawStroke: "#D26214",
+    pawToe: "#B8500C",
   },
   kuro: {
     body: "#2A282D",
@@ -52,6 +58,8 @@ const BREED_COLORS: Record<
     innerEar: "#5A4E58",
     eyes: "#FCD34D", // bright amber
     nose: "#E57373",
+    pawStroke: "#18161A",
+    pawToe: "#524C58",
   },
   shiro: {
     body: "#FFFFFF",
@@ -60,6 +68,8 @@ const BREED_COLORS: Record<
     eyes: "#60A5FA", // blue
     eyeRight: "#FBBF24", // amber (odd eyes)
     nose: "#FFAAA6",
+    pawStroke: "#CBD5E1",
+    pawToe: "#94A3B8",
   },
   hachiware: {
     body: "#FFFFFF",
@@ -68,6 +78,8 @@ const BREED_COLORS: Record<
     innerEar: "#FFB6C1",
     eyes: "#4ADE80",
     nose: "#FF8DA1",
+    pawStroke: "#CBD5E1",
+    pawToe: "#94A3B8",
   },
   sabatora: {
     body: "#CBD5E1",
@@ -76,6 +88,8 @@ const BREED_COLORS: Record<
     innerEar: "#FBCFE8",
     eyes: "#2DD4BF",
     nose: "#F472B6",
+    pawStroke: "#94A3B8",
+    pawToe: "#64748B",
   },
   siamese: {
     body: "#F5EBE6",
@@ -84,6 +98,8 @@ const BREED_COLORS: Record<
     innerEar: "#8D6E63",
     eyes: "#38BDF8", // bright sky blue
     nose: "#3E2723",
+    pawStroke: "#3E2723",
+    pawToe: "#8D6E63",
   },
   pastel: {
     body: "#FAF5FF",
@@ -93,6 +109,8 @@ const BREED_COLORS: Record<
     innerEar: "#FCE7F3",
     eyes: "#818CF8",
     nose: "#F472B6",
+    pawStroke: "#D8B4FE",
+    pawToe: "#A855F7",
   },
 };
 
@@ -168,9 +186,12 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           // Curled up sleeping body
           <g>
             <ellipse cx="54" cy="64" rx="26" ry="18" fill={colors.body} />
-            {/* White belly for chatora */}
+            {/* White belly & chest for chatora */}
             {breed === "chatora" && (
-              <ellipse cx="54" cy="66" rx="18" ry="11" fill="#FFFFFF" />
+              <g>
+                <ellipse cx="54" cy="66" rx="18" ry="11" fill="#FFFFFF" />
+                <ellipse cx="59" cy="58" rx="10" ry="8" fill="#FFFFFF" />
+              </g>
             )}
             {/* Calico spots - large brown & black coverage for Mike */}
             {breed === "mike" && (
@@ -193,9 +214,16 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           // Sitting or walking body
           <g>
             <ellipse cx="50" cy="58" rx="20" ry="17" fill={colors.body} />
-            {/* Chest & belly highlight / White belly for chatora */}
+            {/* Chest & belly highlight / White belly for chatora (connected to chin) */}
             {breed === "chatora" ? (
-              <ellipse cx="52" cy="60" rx="14" ry="12" fill="#FFFFFF" />
+              <g>
+                {/* Throat bib connecting to chin */}
+                <path
+                  d="M 46 45 Q 52 43 58 45 Q 66 58 52 72 Q 38 58 46 45 Z"
+                  fill="#FFFFFF"
+                />
+                <ellipse cx="52" cy="60" rx="14" ry="12" fill="#FFFFFF" />
+              </g>
             ) : (
               <ellipse cx="52" cy="60" rx="13" ry="11" fill={`url(#bellyGrad-${breed})`} />
             )}
@@ -225,33 +253,133 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
           </g>
         )}
 
-        {/* --- LEGS & PAWS --- */}
+        {/* --- LEGS & PAWS (Natural outline matching each breed) --- */}
         {isWalking ? (
           <g className="animate-walk">
             {/* Left back leg */}
-            <ellipse cx="36" cy="74" rx="4" ry="7" fill={colors.body} className="animate-leg-1" />
-            {/* Left front leg (Creamy whitish sock for chatora) */}
-            <ellipse cx="46" cy="74" rx="4" ry="7" fill={breed === "chatora" ? "#F6EDE4" : colors.body} stroke={breed === "chatora" ? "#DAC4B0" : "none"} strokeWidth="0.6" className="animate-leg-2" />
+            <ellipse
+              cx="36"
+              cy="74"
+              rx="4"
+              ry="7"
+              fill={breed === "siamese" ? "#5D4037" : colors.body}
+              stroke={colors.pawStroke}
+              strokeWidth="0.8"
+              className="animate-leg-1"
+            />
+            {/* Left front leg (White sock for chatora with contour border) */}
+            <ellipse
+              cx="46"
+              cy="74"
+              rx="4"
+              ry="7"
+              fill={breed === "chatora" ? "#FFFFFF" : (breed === "siamese" ? "#5D4037" : colors.body)}
+              stroke={breed === "chatora" ? "#DAC4B0" : colors.pawStroke}
+              strokeWidth="0.8"
+              className="animate-leg-2"
+            />
             {/* Right back leg */}
-            <ellipse cx="56" cy="74" rx="4" ry="7" fill={colors.body} className="animate-leg-1" />
+            <ellipse
+              cx="56"
+              cy="74"
+              rx="4"
+              ry="7"
+              fill={breed === "siamese" ? "#5D4037" : colors.body}
+              stroke={colors.pawStroke}
+              strokeWidth="0.8"
+              className="animate-leg-1"
+            />
             {/* Right front leg */}
-            <ellipse cx="66" cy="74" rx="4" ry="7" fill={colors.body} className="animate-leg-2" />
+            <ellipse
+              cx="66"
+              cy="74"
+              rx="4"
+              ry="7"
+              fill={breed === "siamese" ? "#5D4037" : colors.body}
+              stroke={colors.pawStroke}
+              strokeWidth="0.8"
+              className="animate-leg-2"
+            />
           </g>
         ) : activity === "sleeping" ? (
           <g>
-            <ellipse cx="44" cy="72" rx="5" ry="3.5" fill={breed === "chatora" ? "#F6EDE4" : colors.body} stroke={breed === "chatora" ? "#DAC4B0" : "none"} strokeWidth="0.6" />
-            <ellipse cx="62" cy="72" rx="5" ry="3.5" fill={colors.body} />
+            <ellipse
+              cx="44"
+              cy="72"
+              rx="5"
+              ry="3.5"
+              fill={breed === "chatora" ? "#FFFFFF" : (breed === "siamese" ? "#5D4037" : colors.body)}
+              stroke={breed === "chatora" ? "#DAC4B0" : colors.pawStroke}
+              strokeWidth="0.8"
+            />
+            <ellipse
+              cx="62"
+              cy="72"
+              rx="5"
+              ry="3.5"
+              fill={breed === "siamese" ? "#5D4037" : colors.body}
+              stroke={colors.pawStroke}
+              strokeWidth="0.8"
+            />
           </g>
         ) : (
           <g>
-            {/* Front paws neatly placed (Left front paw creamy whitish for chatora) */}
-            <ellipse cx="45" cy="73" rx="5" ry="4" fill={breed === "chatora" ? "#F6EDE4" : colors.body} stroke={breed === "chatora" ? "#DAC4B0" : "#E2E8F0"} strokeWidth="0.8" />
-            <ellipse cx="58" cy="73" rx="5" ry="4" fill={colors.body} stroke="#E2E8F0" strokeWidth="0.5" />
+            {/* Front paws neatly placed (Left front paw white for chatora with contour border) */}
+            <ellipse
+              cx="45"
+              cy="73"
+              rx="5"
+              ry="4"
+              fill={breed === "chatora" ? "#FFFFFF" : (breed === "siamese" ? "#5D4037" : colors.body)}
+              stroke={breed === "chatora" ? "#DAC4B0" : colors.pawStroke}
+              strokeWidth="0.9"
+            />
+            <ellipse
+              cx="58"
+              cy="73"
+              rx="5"
+              ry="4"
+              fill={breed === "siamese" ? "#5D4037" : colors.body}
+              stroke={colors.pawStroke}
+              strokeWidth="0.9"
+            />
             {/* Toe lines */}
-            <line x1="43" y1="73" x2="43" y2="76" stroke={breed === "chatora" ? "#BFA38E" : "#CBD5E1"} strokeWidth="1" strokeLinecap="round" />
-            <line x1="46" y1="73" x2="46" y2="76" stroke={breed === "chatora" ? "#BFA38E" : "#CBD5E1"} strokeWidth="1" strokeLinecap="round" />
-            <line x1="56" y1="73" x2="56" y2="76" stroke="#CBD5E1" strokeWidth="1" strokeLinecap="round" />
-            <line x1="59" y1="73" x2="59" y2="76" stroke="#CBD5E1" strokeWidth="1" strokeLinecap="round" />
+            <line
+              x1="43"
+              y1="73"
+              x2="43"
+              y2="76"
+              stroke={breed === "chatora" ? "#BFA38E" : colors.pawToe}
+              strokeWidth="1"
+              strokeLinecap="round"
+            />
+            <line
+              x1="46"
+              y1="73"
+              x2="46"
+              y2="76"
+              stroke={breed === "chatora" ? "#BFA38E" : colors.pawToe}
+              strokeWidth="1"
+              strokeLinecap="round"
+            />
+            <line
+              x1="56"
+              y1="73"
+              x2="56"
+              y2="76"
+              stroke={colors.pawToe}
+              strokeWidth="1"
+              strokeLinecap="round"
+            />
+            <line
+              x1="59"
+              y1="73"
+              x2="59"
+              y2="76"
+              stroke={colors.pawToe}
+              strokeWidth="1"
+              strokeLinecap="round"
+            />
           </g>
         )}
 
@@ -312,9 +440,17 @@ export const CatSprite: React.FC<CatSpriteProps> = ({
             </>
           )}
 
-          {/* White muzzle around mouth for chatora (茶トラ白) */}
+          {/* White muzzle and chin/throat for chatora (茶トラ白: 口の周りから口の下・顎まで白くつながる) */}
           {breed === "chatora" && (
-            <ellipse cx="55" cy="43" rx="10" ry="6.5" fill="#FFFFFF" />
+            <g>
+              {/* Muzzle around mouth */}
+              <ellipse cx="55" cy="43" rx="10" ry="6.5" fill="#FFFFFF" />
+              {/* Chin & throat extending down from below mouth */}
+              <path
+                d="M 47 44 Q 55 43 63 44 Q 63 53 55 54 Q 47 53 47 44 Z"
+                fill="#FFFFFF"
+              />
+            </g>
           )}
 
           {/* Cheeks Blush */}
