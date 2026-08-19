@@ -6,7 +6,6 @@ import {
   Volume2,
   VolumeX,
   Bell,
-  Sparkles,
   Cat,
   Palette,
   Clock,

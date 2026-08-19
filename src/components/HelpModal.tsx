@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { X, Clock, Cat, Sparkles, CheckCircle2 } from "lucide-react";
+import { X, Clock, Cat, Sparkles } from "lucide-react";
 
 interface HelpModalProps {
   isOpen: boolean;

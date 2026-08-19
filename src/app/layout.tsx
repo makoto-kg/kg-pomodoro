@@ -1,5 +1,20 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans, Zen_Maru_Gothic } from "next/font/google";
 import "./globals.css";
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
+});
+
+const zenMaruGothic = Zen_Maru_Gothic({
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+  variable: "--font-zen-maru",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "ねこポモドーロ (Neko Pomodoro) | 00/30分連動 集中タイマー",
@@ -13,19 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="ja" className={`${zenMaruGothic.variable} ${plusJakartaSans.variable}`}>
       <body className="min-h-screen antialiased font-sans selection:bg-rose-200 selection:text-rose-900">
         {children}
       </body>

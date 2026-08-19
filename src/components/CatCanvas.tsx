@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   CatInstance,
   CatBreed,
-  CatActivity,
   FocusActivity,
   BreakActivity,
   Phase,
@@ -52,13 +51,6 @@ const FOCUS_ACTIVITIES: FocusActivity[] = [
   "studying",
   "writing",
   "pomodoro",
-];
-
-const BREAK_ACTIVITIES: BreakActivity[] = [
-  "sleeping",
-  "eating",
-  "playing",
-  "tea",
 ];
 
 const FOCUS_QUOTES = [
@@ -138,14 +130,19 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
   soundEnabled,
   theme,
 }) => {
-  const [cats, setCats] = useState<CatInstance[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [hearts, setHearts] = useState<
-    { id: string; x: number; y: number; text: string }[]
-  >([]);
+  const [cats, setCats] = useState<CatInstance[]>(() => {
+    const initial: CatInstance[] = [];
+    for (let i = 0; i < catCount; i++) {
+      initial.push(createRandomCat(i, phase, initial));
+    }
+    return initial;
+  });
+  const [prevCount, setPrevCount] = useState(catCount);
+  const [prevPhase, setPrevPhase] = useState(phase);
 
-  // Initialize cats or adjust count
-  useEffect(() => {
+  // Synchronize state when catCount changes
+  if (catCount !== prevCount) {
+    setPrevCount(catCount);
     setCats((prev) => {
       if (prev.length === catCount) return prev;
       const nextCats: CatInstance[] = [];
@@ -158,10 +155,11 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
       }
       return nextCats;
     });
-  }, [catCount, phase]);
+  }
 
-  // Update cat activities when phase changes
-  useEffect(() => {
+  // Synchronize state when phase changes
+  if (phase !== prevPhase) {
+    setPrevPhase(phase);
     setCats((prev) =>
       prev.map((cat) => ({
         ...cat,
@@ -169,11 +167,15 @@ export const CatCanvas: React.FC<CatCanvasProps> = ({
           phase === "focus"
             ? getRandomItem(FOCUS_ACTIVITIES)
             : getBreakActivity(),
-        // Immediately settle down into calm state
         state: "active",
       }))
     );
-  }, [phase]);
+  }
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [hearts, setHearts] = useState<
+    { id: string; x: number; y: number; text: string }[]
+  >([]);
 
   // AI roaming ticker loop
   useEffect(() => {

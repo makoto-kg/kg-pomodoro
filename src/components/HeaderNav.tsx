@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Settings, TimerMode, Phase } from "@/types/pomodoro";
-import { Volume2, VolumeX, Settings as SettingsIcon, Sparkles, HelpCircle } from "lucide-react";
+import { Settings, TimerMode } from "@/types/pomodoro";
+import { Volume2, VolumeX, Settings as SettingsIcon, HelpCircle } from "lucide-react";
 
 interface HeaderNavProps {
   settings: Settings;
@@ -10,7 +10,6 @@ interface HeaderNavProps {
   onOpenSettings: () => void;
   onOpenHelp: () => void;
   mode: TimerMode;
-  phase: Phase;
 }
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({
@@ -19,7 +18,6 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   onOpenSettings,
   onOpenHelp,
   mode,
-  phase,
 }) => {
   return (
     <header className="w-full max-w-4xl mx-auto flex items-center justify-between py-4 px-4 sm:px-6">

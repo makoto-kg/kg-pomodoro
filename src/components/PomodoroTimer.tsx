@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Settings, Theme, TimerMode } from "@/types/pomodoro";
+import React, { useState, useSyncExternalStore } from "react";
+import { Settings, Theme } from "@/types/pomodoro";
 import { usePomodoro } from "@/hooks/usePomodoro";
 import { HeaderNav } from "./HeaderNav";
 import { ClockDisplay } from "./ClockDisplay";
@@ -9,7 +9,7 @@ import { TimelineBar } from "./TimelineBar";
 import { CatCanvas } from "./CatCanvas";
 import { SettingsModal } from "./SettingsModal";
 import { HelpModal } from "./HelpModal";
-import { Sparkles, Coffee, BookOpen, Heart } from "lucide-react";
+import { Coffee, BookOpen, Heart } from "lucide-react";
 
 const DEFAULT_SETTINGS: Settings = {
   soundEnabled: true,
@@ -55,24 +55,25 @@ const THEME_STYLES: Record<
   },
 };
 
+const emptySubscribe = () => () => {};
+
 export const PomodoroTimer: React.FC = () => {
-  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const [settings, setSettings] = useState<Settings>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("neko_pomodoro_settings");
+        if (saved) {
+          return { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return DEFAULT_SETTINGS;
+  });
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-
-  // Load persisted settings
-  useEffect(() => {
-    setIsClient(true);
-    try {
-      const saved = localStorage.getItem("neko_pomodoro_settings");
-      if (saved) {
-        setSettings((prev) => ({ ...prev, ...JSON.parse(saved) }));
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
 
   const updateSettings = (newSettings: Partial<Settings>) => {
     setSettings((prev) => {
@@ -125,7 +126,6 @@ export const PomodoroTimer: React.FC = () => {
         onOpenSettings={() => setIsSettingsOpen(true)}
         onOpenHelp={() => setIsHelpOpen(true)}
         mode={mode}
-        phase={state.phase}
       />
 
       {/* Main Content Area */}
@@ -177,7 +177,6 @@ export const PomodoroTimer: React.FC = () => {
             {/* 60-min Timeline Bar */}
             <TimelineBar
               currentDate={state.currentDate}
-              phase={state.phase}
             />
 
             {/* Current Phase Activity Description Card */}

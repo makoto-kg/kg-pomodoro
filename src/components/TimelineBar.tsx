@@ -1,16 +1,13 @@
 "use client";
 
 import React from "react";
-import { Phase } from "@/types/pomodoro";
 
 interface TimelineBarProps {
   currentDate: Date;
-  phase: Phase;
 }
 
 export const TimelineBar: React.FC<TimelineBarProps> = ({
   currentDate,
-  phase,
 }) => {
   const m = currentDate.getMinutes();
   const s = currentDate.getSeconds();

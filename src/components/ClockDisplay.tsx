@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { PomodoroState, TimerMode, Phase } from "@/types/pomodoro";
-import { Play, Pause, RotateCcw, SkipForward, Clock, Sparkles } from "lucide-react";
+import { PomodoroState } from "@/types/pomodoro";
+import { Play, Pause, RotateCcw, SkipForward, Clock } from "lucide-react";
 
 interface ClockDisplayProps {
   state: PomodoroState;
